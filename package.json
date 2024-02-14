@@ -10,7 +10,6 @@
     "version:patch": "npx standard-version -r patch",
     "version:minor": "npx standard-version -r minor",
     "version:major": "npx standard-version -r major"
-
   },
   "private": true,
   "dependencies": {
@@ -33,6 +32,9 @@
     "@angular/cli": "~16.0.3",
     "@angular/compiler-cli": "^16.0.0",
     "@types/jasmine": "~4.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.1",
+    "@typescript-eslint/parser": "^7.0.1",
+    "eslint": "^8.56.0",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
