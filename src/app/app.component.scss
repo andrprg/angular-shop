@@ -1,0 +1,10 @@
+@import 'src/stylesheets/index';
+
+:host {
+    display: grid;
+    grid-template-rows: 20% 1fr 20%;
+    height: 100%;
+    max-width: 1220px;
+    margin: auto;
+}
+
