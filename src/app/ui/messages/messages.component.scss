@@ -1,0 +1,56 @@
+@import 'src/stylesheets/colors';
+@import "src/stylesheets/font_mixins";
+
+:host {
+  position: fixed;
+  width: 100%;
+  width: 100%;  
+}
+
+.container {
+  @include font-Ubuntu-fz14-fw400;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+  min-height: 60px;
+  margin-bottom: 10px;
+
+  .container__item {
+    display: flex;
+    align-items: center;
+
+    mat-icon {
+      font-size: 22px;
+    }
+  }
+  
+  .container__title {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: 700;
+  }
+
+  .container__close {
+    position: absolute;
+    right: 2.7px;
+    top: 2.7px;
+    cursor: pointer;
+    color: var(--color-black);
+  }
+}
+
+.errors-container {
+  background-color: var(--color-FFE7E6);
+  color: var(--color-FF7757);
+}
+
+.warns-container {
+  background-color: var(--color-FFF2E2);
+  color: var(--color-CC895C);
+}
+
+.messages-container {
+    background-color: var(--color-E4F8F0);
+    color: var(--color-1EA97C);
+  }
