@@ -6,8 +6,7 @@ const bodyParser = require('body-parser');
 const app: Application = express();
 app.use(bodyParser.json());
 
-app.route('/').get((req, res) => res.send('Server working!'));
-app.route('/api/login').post(loginUser);
+app.route('/login').post(loginUser);
 
 
 const httpServer = app.listen(9000, () => {

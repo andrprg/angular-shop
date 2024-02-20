@@ -1,11 +1,19 @@
 GET http://localhost:9000 HTTP/1.1
 
-###
-
-POST http://localhost:9000/api/login HTTP/1.1
+### Success
+POST http://localhost:9000/login HTTP/1.1
 content-type: application/json
 
 {
     "login": "test@test.ru",
     "password": "test"
+}
+
+### Error: Invalind login or password
+POST http://localhost:9000/login HTTP/1.1
+content-type: application/json
+
+{
+    "login": "test@test.ru",
+    "password": "123456"
 }
