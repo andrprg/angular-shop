@@ -26,8 +26,6 @@ export function loginUser(req: Request, res: Response) {
 
 export function token(req: Request, res: Response)  {
     const postData = req.body
-    console.log('1:', postData);
-    console.log('2:', tokenList);
     if((postData.refreshToken) && (postData.refreshToken === tokenList.get(postData.refreshToken).refreshToken)) {
         const { id, name, email } = postData;
         const token = jwt.sign({ id, name, email }, CONFIG.secret, { expiresIn: CONFIG.tokenLife})
@@ -37,6 +35,17 @@ export function token(req: Request, res: Response)  {
         tokenList.set(postData.refreshToken, {'refreshToken': postData.refreshToken, token});
         res.status(200).json(response);        
     } else {
-        res.status(404).send('Invalid request')
+        res.status(404).send('Unauthorized');
     }
+}
+
+export function revokeToken(req: Request, res: Response) {
+    const postData = req.body;
+    if(postData.refreshToken === tokenList.get(postData.refreshToken)?.refreshToken) {
+        tokenList.delete(postData.refreshToken);
+        res.status(200).json({"revoke": "success"});  
+    } else {
+        res.status(400).send('Token not found');
+    }
+    
 }
