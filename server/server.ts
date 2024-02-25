@@ -1,15 +1,14 @@
 import * as express from 'express';
 import {Application} from "express";
+import { loginUser, revokeToken, token } from './routers/login.route';
 const bodyParser = require('body-parser');
 
 const app: Application = express();
 app.use(bodyParser.json());
-const cors = require('cors');
 
-app.use(cors({origin: true}));
-
-
-app.route('/').get((req, res) => res.send('Server working!'));
+app.route('/login').post(loginUser);
+app.route('/token').post(token);
+app.route('/revoketoken').post(revokeToken);
 
 
 const httpServer = app.listen(9000, () => {
