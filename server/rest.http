@@ -17,3 +17,12 @@ content-type: application/json
     "login": "test@test.ru",
     "password": "123456"
 }
+
+### get token
+POST http://localhost:9000/token HTTP/1.1
+content-type: application/json
+
+{
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6ItCa0YPQutC60L4g0JzQuNGF0LDQuNC7IiwiZW1haWwiOiJ0ZXN0QHRlc3QucnUiLCJpYXQiOjE3MDg4NzU4ODEsImV4cCI6MTcwODk2MjI4MX0.Fy9wmM6gJmMwLnFwsBtgEfarQZEMnP4MYYI_KkRhvZc"
+}
+
