@@ -2,9 +2,11 @@ import * as express from 'express';
 import {Application} from "express";
 import { loginUser, revokeToken, token } from './routers/login.route';
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app: Application = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 app.route('/login').post(loginUser);
 app.route('/token').post(token);

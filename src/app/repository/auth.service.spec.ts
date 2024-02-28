@@ -3,6 +3,7 @@ import { TestBed, fakeAsync } from '@angular/core/testing';
 import { AuthService } from './auth.service';
 import { LocalStorageService } from './local-storage.service';
 import { of } from 'rxjs';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -20,6 +21,9 @@ describe('AuthService', () => {
       }
     );
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ],
       providers: [
         AuthService,
         {

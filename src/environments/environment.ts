@@ -1,1 +1,1 @@
-export const HOST_URL = '';
+export const HOST_URL = 'http://localhost:9000';
