@@ -1,2 +1,8 @@
 @import 'src/stylesheets/index';
 
+:host {
+    max-width: 1220px;
+    width: 350px;
+    justify-self: center;
+}
+
