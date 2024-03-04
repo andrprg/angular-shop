@@ -1,11 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, map, shareReplay, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, delay, map, shareReplay, take, takeUntil, tap } from 'rxjs';
 import { User } from '../domain/user';
 import { LocalStorageService } from './local-storage.service';
 import { ApiCommonService } from '../data/common/api-common.service';
 import { Token } from '../domain/token';
 import { SpinnerService } from '../ui/spinner/spinner.service';
-import { token } from 'server/routers/login.route';
+import { timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,17 @@ export class AuthService implements OnDestroy {
    * Информация о пользователе
    */
   user$: Observable<User | null> = this.subject.asObservable();
+
+  /**
+   * access token
+   */
+  private access_token: string | undefined | null;
+
+    /**
+   * refresh token
+   */
+    private refresh_token: string | undefined | null;
+
 
   /**
    * Пользователь авторизован
@@ -45,6 +56,16 @@ export class AuthService implements OnDestroy {
     this.localStorageService.getItem<User>('user').pipe(
       takeUntil(this.destroy$)
     ).subscribe(user => user && this.subject.next(user));
+
+    this.localStorageService.getItem<string>('token').pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(token => this.access_token = token);
+
+    this.localStorageService.getItem<string>('refresh_token').pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(token => this.refresh_token = token);
+
+
   }
 
   ngOnDestroy(): void {
@@ -57,14 +78,16 @@ export class AuthService implements OnDestroy {
  * @param email 
  * @param password 
  */
-  login(login:string, password:string): Observable<User> {
-    return this.apiCommonService.post<Token>('/login', {login, password}).pipe(
+  login(email:string, password:string): Observable<User> {
+    return this.apiCommonService.post<Token>('/login', {email, password}).pipe(
       tap((response: Token) => {
         this.localStorageService.setItem('token', response.token);
         this.localStorageService.setItem('refresh_token', response.refreshToken);
       }),
       map((response: Token) => {
         const {id, name, email} = JSON.parse(atob(response.token.split('.')[1]));
+        this.subject.next({id, name, email});
+        this.startTokenTimer();
         return {id, name, email};
       }),
       shareReplay()
@@ -72,9 +95,38 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
+    console.log('LOGOUT');
     this.subject.next(null);
     this.localStorageService.removeItem('token');
     this.localStorageService.removeItem('refresh_token');
 }
-  
+
+  /**   
+   * @description запускаем таймер за минуту до истечения срока действия токена
+   */
+  private startTokenTimer() {
+    if(!this.access_token) return;
+    const jwtToken = JSON.parse(atob(this.access_token.split('.')[1]));
+    console.log('date:', new Date(jwtToken.exp * 1000));
+    const expires = new Date(jwtToken.exp * 1000);
+    const timeout = expires.getTime() - Date.now(); //  - (60 * 1000);
+    timer(timeout).subscribe(_ => this.refreshToken()); 
+  } 
+
+  private refreshToken() {
+    this.apiCommonService.post<Token>('/token', {refreshToken: this.refresh_token}).pipe(
+      tap((response: Token) => {
+        this.localStorageService.setItem('token', response.token);
+      }),
+      map((response: Token) => {
+        const {id, name, email} = JSON.parse(atob(response.token.split('.')[1]));
+        this.subject.next({id, name, email});
+        this.startTokenTimer();
+        return {id, name, email};
+      }),
+      take(1)
+    ).subscribe({
+      error: () => this.logout() 
+    });   
+  }
 }

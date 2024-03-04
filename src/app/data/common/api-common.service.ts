@@ -67,8 +67,7 @@ export class ApiCommonService {
    */
   post<T = void>(url: string, body?: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
     return this._http
-      .post<T>(this.makeUrl(url), body ?? null, this.getApiRequestOptions(options))
-      .pipe(catchError((error) => throwError(() => new Error(error))));
+      .post<T>(this.makeUrl(url), body ?? null, this.getApiRequestOptions(options));      
   }
 
   /**
