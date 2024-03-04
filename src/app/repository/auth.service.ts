@@ -95,7 +95,6 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
-    console.log('LOGOUT');
     this.subject.next(null);
     this.localStorageService.removeItem('token');
     this.localStorageService.removeItem('refresh_token');
@@ -107,7 +106,6 @@ export class AuthService implements OnDestroy {
   private startTokenTimer() {
     if(!this.access_token) return;
     const jwtToken = JSON.parse(atob(this.access_token.split('.')[1]));
-    console.log('date:', new Date(jwtToken.exp * 1000));
     const expires = new Date(jwtToken.exp * 1000);
     const timeout = expires.getTime() - Date.now(); //  - (60 * 1000);
     timer(timeout).subscribe(_ => this.refreshToken()); 
