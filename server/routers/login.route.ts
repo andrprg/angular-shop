@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken');
 const tokenList = new Map();
 
 export function loginUser(req: Request, res: Response) {
-    const { login, password } = req.body;
-    const user = authenticate(login, password);
+    const { email, password } = req.body;
+    const user = authenticate(email, password);
 
     if (user) {
         const { id, name, email } = user;
