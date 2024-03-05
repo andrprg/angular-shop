@@ -5,7 +5,7 @@ POST http://localhost:9000/login HTTP/1.1
 content-type: application/json
 
 {
-    "login": "test@test.ru",
+    "email": "test@test.ru",
     "password": "test"
 }
 
@@ -14,7 +14,7 @@ POST http://localhost:9000/login HTTP/1.1
 content-type: application/json
 
 {
-    "login": "test@test.ru",
+    "email": "test@test.ru",
     "password": "123456"
 }
 
@@ -34,3 +34,7 @@ content-type: application/json
     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6ItCa0YPQutC60L4g0JzQuNGF0LDQuNC7IiwiZW1haWwiOiJ0ZXN0QHRlc3QucnUiLCJpYXQiOjE3MDg4Nzg4MDYsImV4cCI6MTcwODk2NTIwNn0.C_bfd7YylFdnL7QzKOoIlXBnjwlGapLB7qlpFmThBJg"
 }
 
+### get products
+GET http://localhost:9000/products HTTP/1.1
+Authorization: Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6Ikt1a2tvIE1pY2hhaWwiLCJlbWFpbCI6InRlc3RAdGVzdC5ydSIsImlhdCI6MTcwOTY1NDAzOSwiZXhwIjoxNzA5NjU0OTM5fQ.hfw_hFqFirYgfbWIAMKVG56ezcsd0SY7zhPwLQ07b-0
+content-type: application/json
