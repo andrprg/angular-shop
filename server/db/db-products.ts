@@ -19,7 +19,7 @@ export const kTestProducts = [
       id: '3',
       imageUrl: 'assets/products/pasta-plate.jpg',
       title: 'Pasta plate',
-      description: 'Lorem ipsum',
+      description: 'Посуда с южным итальянским колоритом. Приготовьте на ужин пасту или лазанью и пригласите гостей. Бело-голубые фарфоровые тарелки воплотят атмосферу уютного вечера на берегу Адриатики, где бы вы ни находились.',
       price: 17,
       availableQuantity: 5,
     },
