@@ -9,7 +9,7 @@
 }
 
 .container {
-  @include font-Ubuntu-fz14-fw400;
+  @include font-Ubuntu-fz14(400);
   display: flex;
   align-items: center;
   position: relative;
