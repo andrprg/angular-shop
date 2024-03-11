@@ -1,0 +1,19 @@
+@import "src/stylesheets/index";
+
+.container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    justify-content: center;
+    row-gap: 1.1rem;
+    column-gap: 1.1rem;
+
+    &__price {
+        margin-top: 1.3rem;
+        @include font-Ubuntu-fz24(400);
+    }
+}
+
+mat-card-content {
+    padding-top: 1rem;
+}

@@ -6,6 +6,8 @@ export const kTestProducts = [
       description: 'Lorem ipsum',
       price: 15,
       availableQuantity: 5,
+      avgRating: 4.5,
+      numRatings: 5,
     },
     {
       id: '2',
@@ -14,6 +16,8 @@ export const kTestProducts = [
       description: 'Lorem ipsum',
       price: 13,
       availableQuantity: 5,
+      avgRating: 4.1,
+      numRatings: 20,
     },
     {
       id: '3',
@@ -22,6 +26,8 @@ export const kTestProducts = [
       description: 'Посуда с южным итальянским колоритом. Приготовьте на ужин пасту или лазанью и пригласите гостей. Бело-голубые фарфоровые тарелки воплотят атмосферу уютного вечера на берегу Адриатики, где бы вы ни находились.',
       price: 17,
       availableQuantity: 5,
+      avgRating: 3.9,
+      numRatings: 12,
     },
     {
       id: '4',
@@ -30,6 +36,8 @@ export const kTestProducts = [
       description: 'Lorem ipsum',
       price: 12,
       availableQuantity: 5,
+      avgRating: 5,
+      numRatings: 1,
     },
     {
       id: '5',
