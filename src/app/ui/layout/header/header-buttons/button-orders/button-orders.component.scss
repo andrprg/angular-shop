@@ -1,0 +1,13 @@
+@import 'src/stylesheets/index';
+
+.container-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__title {
+        color: var(--color-FFFFFF);
+        @include font-Ubuntu-fz14(400);
+    }
+}

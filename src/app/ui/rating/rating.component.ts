@@ -10,11 +10,7 @@ import { Product } from 'src/app/domain/product';
   templateUrl: './rating.component.html',
   styleUrls: ['./rating.component.scss']
 })
-export class RatingComponent implements AfterViewInit {
+export class RatingComponent {
   @Input()
   product!: Product;
-
-  ngAfterViewInit(): void {
-    console.log('pr', this.product);    
-  }
 }
