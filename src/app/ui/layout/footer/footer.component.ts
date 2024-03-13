@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ButtonSignInOutComponent } from '../header/header-buttons/button-sign-in-out/button-sign-in-out.component';
-import { ButtonOrdersComponent } from '../header/header-buttons/button-orders/button-orders.component';
-import { ButtonCartComponent } from '../header/header-buttons/button-cart/button-cart.component';
+import { ButtonSignInOutComponent } from '../header-buttons/button-sign-in-out/button-sign-in-out.component';
+import { ButtonOrdersComponent } from '../header-buttons/button-orders/button-orders.component';
+import { ButtonCartComponent } from '../header-buttons/button-cart/button-cart.component';
 
 @Component({
     selector: 'app-footer',
