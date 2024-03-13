@@ -1,20 +1,16 @@
-<mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="shopping_cart"></mat-icon>
-<mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="logout"></mat-icon>
-<mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="login"></mat-icon>
-
 <div class="container">
-    <mat-card *ngFor="let product of products$ | async">
+    <mat-card *ngFor="let product of products$ | async" class="container__card">
         <mat-card-header>
             <mat-card-title>{{product.title}}</mat-card-title>
         </mat-card-header>
-        <img mat-card-image [src]="product.imageUrl | hostUrl" alt="Photo of a Shiba Inu">
+        <img mat-card-image class="container__image" [src]="product.imageUrl | hostUrl" alt="Photo of a Shiba Inu">
         <mat-divider></mat-divider>
         <mat-card-content>
             <p>
                 {{product.description}}
             </p>
-            <app-rating  *ngIf="product?.numRatings && product.numRatings > 0" [product]="product"></app-rating>
-            <p class="container__price">{{product.price}} ₽</p>
+            <app-rating *ngIf="product?.numRatings && product.numRatings > 0" [product]="product"></app-rating>
+            <p class="container__price">{{product.price | rub}}</p>
         </mat-card-content>
     </mat-card>
 </div>

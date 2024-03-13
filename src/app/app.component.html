@@ -1,4 +1,13 @@
-<app-header></app-header>
-<app-main></app-main>
 <app-messages></app-messages>
 <app-spinner></app-spinner>
+
+<ng-container [ngSwitch]="layoutType$ | async">
+    <ng-container *ngSwitchDefault>
+        <app-header></app-header>
+        <app-main><router-outlet /></app-main>
+    </ng-container>
+    <ng-container *ngSwitchCase="breakpoints.XSmall">
+        <app-main><router-outlet /></app-main>
+        <app-footer></app-footer> 
+    </ng-container>
+</ng-container>

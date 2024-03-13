@@ -9,6 +9,7 @@ import { HostUrlPipe } from 'src/app/core/pipes/host-url.pipe';
 import {MatDividerModule} from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { RatingComponent } from 'src/app/ui/rating/rating.component';
+import { RubPipe } from 'src/app/core/pipes/rub.pipe';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,8 @@ import { RatingComponent } from 'src/app/ui/rating/rating.component';
     HostUrlPipe,
     MatDividerModule,
     MatIconModule,
-    RatingComponent
+    RatingComponent,
+    RubPipe
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
