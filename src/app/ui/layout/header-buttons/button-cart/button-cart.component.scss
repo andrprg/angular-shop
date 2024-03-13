@@ -10,4 +10,8 @@
         color: var(--color-FFFFFF);
         @include font-Ubuntu-fz14(400);
     }
+
+    .mat-primary {
+        color: var(--color-FFFFFF);
+    }
 }
