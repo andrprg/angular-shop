@@ -4,9 +4,11 @@ import { FooterComponent } from './ui/layout/footer/footer.component';
 import { MainComponent } from './ui/layout/main/main.component';
 import { MessagesComponent } from './ui/messages/messages.component';
 import { SpinnerComponent } from './ui/spinner/spinner.component';
-import { AuthService } from './repository/auth.service';
-import { Subject, filter, takeUntil } from 'rxjs';
-import { Router } from '@angular/router';
+import { Observable, Subject, filter, takeUntil } from 'rxjs';
+import { RouterOutlet } from '@angular/router';
+import { LayoutService } from './repository/layout.service';
+import { Breakpoints } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,33 +16,33 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss'],
   standalone: true,
   imports: [
-    MainComponent, 
-    HeaderComponent, 
+    MainComponent,
+    HeaderComponent,
     FooterComponent,
     MessagesComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    RouterOutlet,
+    FooterComponent,
+    CommonModule,
   ]
 })
 export class AppComponent implements OnDestroy {
 
-    /**
-   * Subject для отписки
-   */
-    destroy$ = new Subject<boolean>();
+  /**
+ * Subject для отписки
+ */
+  destroy$ = new Subject<boolean>();
+
+  readonly breakpoints = Breakpoints;
+
+  layoutType$!: Observable<string>;
 
 
   constructor(
-    private authService: AuthService,
-    private router: Router,
+    private layoutService: LayoutService
   ) {
-    this.authService.isLoggedOut$.pipe(
-      filter(isLogged => isLogged),
-      takeUntil(this.destroy$)
-    ).subscribe({
-      next: _ => {
-        this.router.navigate(['/login']);
-      },
-    })
+    this.layoutType$ = this.layoutService.layoutType$;
+    
   }
 
   ngOnDestroy(): void {

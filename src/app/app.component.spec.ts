@@ -9,7 +9,7 @@ describe('AppComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AppComponent, HttpClientTestingModule]
+      imports: [AppComponent, HttpClientTestingModule, RouterTestingModule]
     });
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;

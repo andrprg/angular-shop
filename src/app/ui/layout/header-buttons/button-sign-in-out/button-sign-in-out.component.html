@@ -1,0 +1,9 @@
+<a mat-list-item routerLink="login" class="link link-login"  *ngIf="auth.isLoggedOut$ | async">
+    <mat-icon fontIcon="login"></mat-icon>
+    <span class="link__title">Войти</span>
+</a>
+
+<a mat-list-item routerLink="/" class="link link-logout"  *ngIf="auth.isLoggedIn$ | async" (click)="logout()">
+    <mat-icon fontIcon="logout"></mat-icon>
+    <span class="link__title">Выйти</span>
+</a>

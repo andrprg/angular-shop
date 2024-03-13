@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import { HeaderButtonsComponent } from '../header-buttons/header-buttons.component';
 
 @Component({
     selector: 'app-header',
@@ -7,7 +8,10 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     styleUrls: ['./header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [MatToolbarModule]
+    imports: [
+        MatToolbarModule,
+        HeaderButtonsComponent
+    ]
 })
 export class HeaderComponent {
 

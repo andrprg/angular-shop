@@ -1,0 +1,20 @@
+@import "src/stylesheets/index";
+
+.container-rating {
+    display: flex;
+    align-items: center;    
+    
+    &__icon {
+        color: var(--color-FFC107);
+        margin-right: 0.3rem;
+    }
+
+    &__num {
+        @include font-Ubuntu-fz18(700);
+        margin-right: 0.3rem;
+    }
+
+    &__count  {
+        @include font-Ubuntu-fz16(400)
+    }
+}
