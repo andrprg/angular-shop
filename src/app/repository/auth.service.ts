@@ -94,6 +94,7 @@ export class AuthService implements OnDestroy {
   }
 
   logout() {
+    this.apiCommonService.post<string>('/revoketoken');
     this.subject.next(null);
     this.localStorageService.removeItem('token');
     this.localStorageService.removeItem('refresh_token');

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 export function products(req: Request, res: Response) {    
     const authHeader = req.headers.authorization; 
     const products = getProducts();
-    
+    /*
     if (!authHeader) { 
         return res.status(401).json({ status: 401, message: 'Unauthorize user!' });        
     }
@@ -17,6 +17,7 @@ export function products(req: Request, res: Response) {
     } catch(e) {
         return res.status(401).json({ status: 401, message: 'Unauthorize user!' }); 
     }
+    */
     
     if(!products) {
         return res.status(500).json({ status: 500, message: 'Ошибка сервера' });        
