@@ -7,7 +7,7 @@ import { HOST_URL } from 'src/environments/environment';
 })
 export class HostUrlPipe implements PipeTransform {
 
-  transform(imageUrl: string): string {
+  transform(imageUrl: string = ''): string {
     return HOST_URL + '/' + imageUrl;
   }
 
