@@ -1,0 +1,33 @@
+@import "src/stylesheets/index";
+
+.counter {
+    display: flex;
+    width: fit-content;
+    border-radius: 5%;
+    height: 2.5rem;
+  }
+  
+  .counter__value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    padding: 0.5rem;  
+    border: 1px solid gray;
+    @include font-Ubuntu-fz20(400);
+  }
+  .counter__btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0.5rem;
+    border: 1px solid gray;
+  }
+  
+  .counter__minus {
+    border-radius: 50% 0 0 50%;
+  }
+  
+  .counter__plus {
+    border-radius: 0 50% 50% 0;
+  }

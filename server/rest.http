@@ -38,3 +38,8 @@ content-type: application/json
 GET http://localhost:9000/products HTTP/1.1
 Authorization: Bear eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6Ikt1a2tvIE1pY2hhaWwiLCJlbWFpbCI6InRlc3RAdGVzdC5ydSIsImlhdCI6MTcwOTY1NDAzOSwiZXhwIjoxNzA5NjU0OTM5fQ.hfw_hFqFirYgfbWIAMKVG56ezcsd0SY7zhPwLQ07b-0
 content-type: application/json
+
+### get product by id
+GET http://localhost:9000/product/2 HTTP/1.1
+content-type: application/json
+

@@ -7,23 +7,5 @@
     justify-content: center;
     row-gap: 1.1rem;
     column-gap: 1.1rem;
-
-    &__card {
-        background-color: var(--color-EDE9EF);
-        padding: 0.7rem;
-    }
-
-    &__image {
-        border-radius: 0.4rem;     
-        margin-bottom: 0.8rem;   
-    }
-
-    &__price {
-        margin-top: 1.3rem;
-        @include font-Ubuntu-fz24(400);
-    }
 }
 
-mat-card-content {
-    padding-top: 1rem;
-}

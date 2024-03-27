@@ -1,12 +1,12 @@
-export type ProductID = String;
+export type ProductID = string;
 
-export class Product {
-    id!: ProductID;
-    imageUrl!: string;
-    title!: string;
-    description!: string;
-    price!: number;
-    availableQuantity!: number;
-    avgRating: number = 0;
-    numRatings: number = 0;
+export interface Product {
+    id: ProductID;
+    imageUrl: string;
+    title: string;
+    description: string;
+    price: number;
+    availableQuantity: number;
+    avgRating: number;
+    numRatings: number;
 }

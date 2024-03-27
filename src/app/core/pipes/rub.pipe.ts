@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class RubPipe implements PipeTransform {
 
-  transform(price: number): string {
+  transform(price: number = 0): string {
     return price + ' ₽';
   }
 

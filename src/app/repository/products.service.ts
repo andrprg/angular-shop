@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiCommonService } from '../data/common/api-common.service';
-import { BehaviorSubject, catchError, of, shareReplay } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, shareReplay } from 'rxjs';
 import { Product } from '../domain/product';
 import { MessagesService } from '../ui/messages/messages.service';
 
@@ -17,7 +17,7 @@ export class ProductsService {
   /**
    * Список продуктов
    */
-  getProducts() {
+  getProducts(): Observable<Product[]> {
     return this.apiCommonService.get<Product[]>('/products')
       .pipe(
         catchError(err => {
@@ -27,5 +27,13 @@ export class ProductsService {
         shareReplay()
       )
   }
+
+
+  getProductById(productId: string): Observable<Product> {
+    return this.apiCommonService.get<Product>(`/product/${productId}`).pipe(
+      shareReplay()
+    );
+  }
+
 
 }

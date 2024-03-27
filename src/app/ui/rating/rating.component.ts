@@ -12,5 +12,5 @@ import { Product } from 'src/app/domain/product';
 })
 export class RatingComponent {
   @Input()
-  product!: Product;
+  product!: Product | null;
 }

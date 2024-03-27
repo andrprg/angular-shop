@@ -1,7 +1,7 @@
 import * as express from 'express';
 import {Application} from "express";
 import { loginUser, revokeToken, token } from './routers/login.route';
-import { products } from './routers/products';
+import { getProductById, products } from './routers/products';
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path')
@@ -15,6 +15,7 @@ app.route('/login').post(loginUser);
 app.route('/token').post(token);
 app.route('/revoketoken').post(revokeToken);
 app.route('/products').get(products);
+app.route('/product/:id').get(getProductById);
 
 
 const httpServer = app.listen(9000, () => {
