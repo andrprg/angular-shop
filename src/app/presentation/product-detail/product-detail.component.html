@@ -1,0 +1,21 @@
+<div class="container" [ngClass]="{
+    'container-xsmall': (layoutType$ | async) === breakpoints.XSmall
+}">
+    <div class="container__image">
+        <img mat-card-image [src]="(product$ | async)?.imageUrl | hostUrl" alt="">
+    </div>
+    <div class="container__info">
+        <h1>{{(product$ | async)?.title}}</h1>
+        <div class="container__description counter__label">{{(product$ | async)?.description}}</div>
+        <app-rating class="container__rating container__field" [product]="product$ | async"></app-rating>
+        <mat-divider></mat-divider>
+        <div class="container__field">{{(product$ | async)?.price | rub}}</div>
+        <mat-divider></mat-divider>
+        <div class="container__counter-label">
+            <span class="counter__label">Количество:</span>
+            <app-product-counter></app-product-counter> 
+        </div>        
+        <mat-divider></mat-divider>
+        <button class="container__btn-add" mat-flat-button color="primary">Добавить в корзину</button>
+    </div>
+</div>
