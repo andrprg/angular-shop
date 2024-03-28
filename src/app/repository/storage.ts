@@ -1,4 +1,4 @@
-import { Observable, ReplaySubject, map } from "rxjs";
+import { BehaviorSubject, Observable, ReplaySubject, map } from "rxjs";
 
 export interface IStorage {
     readonly storage: Storage;
@@ -11,7 +11,7 @@ export interface IStorage {
   }
 
   export abstract class AbstractStorage implements IStorage {
-    readonly state$ = new ReplaySubject<Record<string, any>>(1);
+    readonly state$ = new BehaviorSubject<Record<string, any>>({});
   
     protected key = 'SHOP_DATA';
     protected state: Record<string, any> = {};
@@ -38,6 +38,10 @@ export interface IStorage {
   
     setItem<T = any>(key: string, value: T): void {
       this.setState({ ...this.state, [key]: value });
+    }
+
+    getItemValue<T = any>(key: string): T {
+      return this.state[key];
     }
   
     protected setState(state: Record<string, any>): void {
