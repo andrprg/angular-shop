@@ -43,3 +43,22 @@ content-type: application/json
 GET http://localhost:9000/product/2 HTTP/1.1
 content-type: application/json
 
+
+### add to Cart
+POST http://localhost:9000/addToCart HTTP/1.1
+content-type: application/json
+
+{
+    "userId": "1",
+    "productId": "3",
+    "quantity": 123
+}
+
+### get cart by userId
+GET http://localhost:9000/fetchcart/1 HTTP/1.1
+content-type: application/json
+
+### remove from cart
+DELETE http://localhost:9000/removebyid/1/2 HTTP/1.1
+content-type: application/json
+

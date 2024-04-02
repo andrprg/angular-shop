@@ -2,6 +2,7 @@ import * as express from 'express';
 import {Application} from "express";
 import { loginUser, revokeToken, token } from './routers/login.route';
 import { getProductById, products } from './routers/products';
+import { addToCart, fetchCart, removeById} from './routers/cart';
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path')
@@ -16,6 +17,9 @@ app.route('/token').post(token);
 app.route('/revoketoken').post(revokeToken);
 app.route('/products').get(products);
 app.route('/product/:id').get(getProductById);
+app.route('/addToCart').post(addToCart);
+app.route('/fetchCart/:userId').get(fetchCart);
+app.route('/removebyid/:userId/:productId').delete(removeById);
 
 
 const httpServer = app.listen(9000, () => {

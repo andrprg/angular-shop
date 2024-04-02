@@ -20,7 +20,7 @@ export function products(req: Request, res: Response) {
     */
     
     if(!products) {
-        return res.status(500).json({ status: 500, message: 'Ошибка сервера' });        
+        res.status(500).json({ status: 500, message: 'Ошибка сервера' });        
     }
 
     res.status(200).json(products);
@@ -31,7 +31,7 @@ export function getProductById(req: Request, res: Response) {
     const productId = req.params["id"];
     const product = getProducts().find(product => product.id === productId);
     if(!product) {
-        return res.status(500).json({ status: 500, message: 'Ошибка сервера' });        
+        res.status(500).json({ status: 500, message: 'Ошибка сервера' });        
     }
     res.status(200).json(product);
 }
