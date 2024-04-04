@@ -37,3 +37,8 @@ export function updateQuantityItem(userId: string, productId: string, quantity: 
     }    
     return item;
 }
+
+export function clearCart() {
+    cart = [];
+    return cart;
+}

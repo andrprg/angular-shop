@@ -65,3 +65,7 @@ content-type: application/json
 ### update quantity
 PATCH http://localhost:9000/updatequantity/1/2/444 HTTP/1.1
 content-type: application/json
+
+### clear cart
+DELETE http://localhost:9000/clearcart HTTP/1.1
+content-type: application/json

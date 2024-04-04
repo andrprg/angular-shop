@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { cart, removeItem, updateQuantityItem } from '../db/db-cart';
+import { cart, clearCart, removeItem, updateQuantityItem } from '../db/db-cart';
 
 
 export function addToCart(req: Request, res: Response) {
@@ -30,4 +30,9 @@ export function updateQuantity(req: Request, res: Response) {
     console.log('update', userId, productId, quantity);
     const item = updateQuantityItem(userId, productId, quantity);
     res.status(200).json(item);
+}
+
+export function clear(req: Request, res: Response) {
+    const cart = clearCart();
+    res.status(200).json(cart);
 }
