@@ -29,3 +29,11 @@ export function removeItem(userId: string, productId: string) {
     cart = cart.filter(value => value.userId === userId  && value.productId !== productId);   
     return cart;
 }
+
+export function updateQuantityItem(userId: string, productId: string, quantity: number) {
+    let item = cart.find(value => value.userId === userId  && value.productId !== productId); 
+    if(item) {
+        item.quantity = quantity;  
+    }    
+    return item;
+}
