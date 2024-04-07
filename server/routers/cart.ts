@@ -4,16 +4,19 @@ import { cart, clearCart, removeItem, updateQuantityItem } from '../db/db-cart';
 
 export function addToCart(req: Request, res: Response) {
     const { userId, productId, quantity } = req.body;
-
-    cart.push({ userId, productId, quantity });
-    res.status(200).json({ userId, productId, quantity });
-
+    const index = cart.findIndex(item =>item.userId === userId && item.productId === productId);
+    if(index < 0) {
+        cart.push({ userId, productId, quantity });
+        res.status(200).json({ userId, productId, quantity });    
+    } else {
+        res.status(500).json({ status: 500, message: 'Продукт уже есть в корзине' })
+    }    
 }
 
 export function fetchCart(req: Request, res: Response) {
     const userId = req.params["userId"];
     const cartByUserId = cart.filter(value => value.userId === userId);
-    res.status(200).json(cartByUserId);
+    res.status(200).json(cartByUserId);    
 }
 
 export function removeById(req: Request, res: Response) {

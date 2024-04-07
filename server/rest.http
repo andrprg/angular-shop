@@ -54,7 +54,7 @@ content-type: application/json
     "quantity": 123
 }
 
-### get cart by userId
+### fetch cart by userId
 GET http://localhost:9000/fetchcart/1 HTTP/1.1
 content-type: application/json
 

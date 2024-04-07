@@ -8,7 +8,7 @@
         <p>
             {{product?.description}}
         </p>
-        <app-rating *ngIf="product?.numRatings && product.numRatings > 0" [product]="product"></app-rating>
+        <app-rating *ngIf="product?.numRatings ?? 0 > 0" [product]="product"></app-rating>
         <p class="container__price">{{product?.price | rub}}</p>
     </mat-card-content>
 </mat-card>

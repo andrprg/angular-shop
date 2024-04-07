@@ -27,5 +27,5 @@ import { RouterLink } from '@angular/router';
 })
 
 export class ProductCardComponent {
-  @Input() product!: Product;
+  @Input() product!: Product | null;
 }
