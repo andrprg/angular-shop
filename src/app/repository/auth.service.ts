@@ -73,6 +73,13 @@ export class AuthService implements OnDestroy {
   }
 
   /**
+   * Пользователь
+   */
+  get user(): User | null {
+    return this.subject.getValue();
+  }
+
+  /**
    * Авторизация
    * @param email 
    * @param password 

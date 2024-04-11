@@ -15,10 +15,17 @@ export class LocalCartService {
     private localStorageService: LocalStorageService,
   ) {
     this.items$ = this.localStorageService.getItem<Item[]>('cart')
-    .pipe(
-      map(value => value ?? [])
-    );
-    
+      .pipe(
+        map(value => value ?? [])
+      );
+
+  }
+
+  /**
+ * Получаем корзину покупок
+ */
+  fetchCart(): Item[] {
+    return this.localStorageService.getItemValue<Item[]>('cart') ?? [];
   }
 
   /**
@@ -26,7 +33,7 @@ export class LocalCartService {
    * @param item 
    * @returns 
    */
-  addItem(item: Item): void {
+  addToCart(item: Item): void {
     const items: Item[] = this.localStorageService.getItemValue<Item[]>('cart') ?? [];
     if (items.some(value => value.productId === item.productId)) return;
     this.localStorageService.setItem('cart', [...items, item]);
@@ -39,7 +46,7 @@ export class LocalCartService {
   updateItem(item: Item): void {
     const items: Item[] = (this.localStorageService.getItemValue<Item[]>('cart') ?? [])
       .filter(value => value.productId !== item.productId);
-      this.localStorageService.setItem('cart', [...items, item]);
+    this.localStorageService.setItem('cart', [...items, item]);
   }
 
   /**
@@ -48,7 +55,7 @@ export class LocalCartService {
    */
   deleteItem(productId: ProductID): void {
     const items: Item[] = (this.localStorageService.getItemValue<Item[]>('cart') ?? [])
-    .filter(value => value.productId !== productId);
+      .filter(value => value.productId !== productId);
     this.localStorageService.setItem('cart', items);
   }
 

@@ -21,6 +21,10 @@ export class RemoteCartService {
   ) {
   }
 
+  /**
+   * Получаем корзину покупок
+   * @param userId 
+   */
   fetchCart(userId: string): void {
     const items$ = this.apiCommonService.get<Item[]>(`/fetchCart/${userId}`).pipe(
       catchError(err => {
@@ -79,14 +83,14 @@ export class RemoteCartService {
    * Обновляем количество продукта в корзине
    * @param item 
    */
-  updateQuantity(userId: string, productId: ProductID, quantity: number): void {
-    const item$ = this.apiCommonService.patch<Item>(`/updatequantity`, {userId, productId, quantity}).pipe(
+  updateQuantity(userId: string, item: Item): void {
+    const item$ = this.apiCommonService.patch<Item>(`/updatequantity`, {userId, productId: item.productId, quantity: item.quantity}).pipe(
       catchError(err => {
         this.messagesService.showErrors(err.error.message);
         return of(null);
       }),
       tap(item => {
-        const arr = this.subject.getValue().filter(item => item.productId !== productId);
+        const arr = this.subject.getValue().filter(item => item.productId !== item.productId);
         item && this.subject.next([...arr, item]);
       })
     );
