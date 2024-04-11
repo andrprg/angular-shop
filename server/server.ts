@@ -20,8 +20,8 @@ app.route('/product/:id').get(getProductById);
 app.route('/addToCart').post(addToCart);
 app.route('/fetchCart/:userId').get(fetchCart);
 app.route('/removebyid/:userId/:productId').delete(removeById);
-app.route('/updatequantity/:userId/:productId/:quantity').patch(updateQuantity);
-app.route('/clearcart').delete(clear);
+app.route('/updatequantity').patch(updateQuantity);
+app.route('/clearcart/:userId').delete(clear);
 
 
 const httpServer = app.listen(9000, () => {

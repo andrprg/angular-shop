@@ -53,33 +53,65 @@ export class RemoteCartService {
 
   }
 
+    /**
+   * Удаляем продукт из корзины
+   * @param productId 
+   */
+    deleteItem(userId: string, productId: ProductID): void {
+      const items$ = this.apiCommonService.delete<Item[]>(`/removebyid/${userId}/${productId}`).pipe(
+        catchError(err => {   
+          this.messagesService.showErrors('Ошибка при удаления товара из корзины');
+          return of(null);
+        }),
+        tap(item => {
+          if(item) {
+            const cart = this.subject.getValue().filter(product => product.productId !== productId)
+            this.subject.next(cart);
+          }
+          
+        })
+      );
+      
+      this.spinnerService.showLoaderUntilCompleted(items$).subscribe();
+    }
+
   /**
    * Обновляем количество продукта в корзине
    * @param item 
    */
-  updateQuantity(userId: string, Quantity: Item): void {
-    /*
-    const items: Item[] = (this.localStorageService.getItemValue<Item[]>('cart') ?? [])
-      .filter(value => value.productId !== item.productId);
-    this.localStorageService.setItem('cart', [...items, item]);
-    */
+  updateQuantity(userId: string, productId: ProductID, quantity: number): void {
+    const item$ = this.apiCommonService.patch<Item>(`/updatequantity`, {userId, productId, quantity}).pipe(
+      catchError(err => {
+        this.messagesService.showErrors(err.error.message);
+        return of(null);
+      }),
+      tap(item => {
+        const arr = this.subject.getValue().filter(item => item.productId !== productId);
+        item && this.subject.next([...arr, item]);
+      })
+    );
+    
+    this.spinnerService.showLoaderUntilCompleted(item$).subscribe();
   }
 
-  /**
-   * Удаляем продукт из корзины
-   * @param productId 
-   */
-  deleteItem(userId: string, productId: ProductID): void {
-    /*
-    const items: Item[] = (this.localStorageService.getItemValue<Item[]>('cart') ?? [])
-      .filter(value => value.productId !== productId);
-    this.localStorageService.setItem('cart', items);
-    */
-  }
+
 
   /**
    * Очищаем корзину
    */
-  clear() {
+  clear(userId: string) {
+    const items$ = this.apiCommonService.delete<Item[]>(`/clearcart/${userId}`).pipe(
+      catchError(err => { 
+        this.messagesService.showErrors('Ошибка при удаления товара из корзины');
+        return of(null);
+      }),
+      tap(item => {
+        if(item) {
+          this.subject.next([]);
+        }        
+      })
+    );
+    
+    this.spinnerService.showLoaderUntilCompleted(items$).subscribe();
   }
 }

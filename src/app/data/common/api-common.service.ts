@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
+import { MessagesService } from 'src/app/ui/messages/messages.service';
 import { HOST_URL } from 'src/environments/environment';
 
 export interface ApiRequestOptions {
@@ -18,7 +19,10 @@ export interface ApiRequestOptions {
 export class ApiCommonService {
 
 
-  constructor(private _http: HttpClient) { }
+  constructor(
+    private _http: HttpClient,
+    private messagesService: MessagesService
+  ) { }
 
   /**
    * Получаем параметры запроса
@@ -55,9 +59,10 @@ export class ApiCommonService {
    * @param options 
    * @returns get 
    */
-  get<T = void>(url: string, options?: Partial<ApiRequestOptions>): Observable<T> {
-    return this._http.get<T>(this.makeUrl(url), this.getApiRequestOptions(options)).pipe(catchError((error) => throwError(() => new Error(error))));
+  get<T>(url: string, options?: Partial<ApiRequestOptions>): Observable<T> {
+    return this._http.get<T>(this.makeUrl(url), this.getApiRequestOptions(options));
   }
+
   /**
    * Posts http запрос
    * @param url 
@@ -65,9 +70,9 @@ export class ApiCommonService {
    * @param options 
    * @returns 
    */
-  post<T = void>(url: string, body?: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
+  post<T>(url: string, body?: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
     return this._http
-      .post<T>(this.makeUrl(url), body ?? null, this.getApiRequestOptions(options));      
+      .post<T>(this.makeUrl(url), body ?? null, this.getApiRequestOptions(options));
   }
 
   /**
@@ -77,8 +82,8 @@ export class ApiCommonService {
  * @param options 
  * @returns 
  */
-  patch<T = void>(url: string, body: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
-    return this._http.patch<T>(this.makeUrl(url), body, this.getApiRequestOptions(options)).pipe(catchError((error) => throwError(() => new Error(error))));
+  patch<T>(url: string, body: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
+    return this._http.patch<T>(this.makeUrl(url), body, this.getApiRequestOptions(options));
   }
 
   /**
@@ -88,8 +93,8 @@ export class ApiCommonService {
 * @param options 
 * @returns 
 */
-  put<T = void>(url: string, body: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
-    return this._http.put<T>(this.makeUrl(url), body, this.getApiRequestOptions(options)).pipe(catchError((error) => throwError(() => new Error(error))));
+  put<T>(url: string, body: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
+    return this._http.put<T>(this.makeUrl(url), body, this.getApiRequestOptions(options));
   }
 
   /**
@@ -98,7 +103,7 @@ export class ApiCommonService {
  * @param options 
  * @returns get 
  */
-  delete<T = void>(url: string, options?: Partial<ApiRequestOptions>): Observable<T> {
-    return this._http.delete<T>(this.makeUrl(url), this.getApiRequestOptions(options)).pipe(catchError((error) => throwError(() => new Error(error))));
+  delete<T>(url: string, options?: Partial<ApiRequestOptions>): Observable<T> {
+    return this._http.delete<T>(this.makeUrl(url), this.getApiRequestOptions(options));
   }
 }

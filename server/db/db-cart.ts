@@ -31,14 +31,15 @@ export function removeItem(userId: string, productId: string) {
 }
 
 export function updateQuantityItem(userId: string, productId: string, quantity: number) {
-    let item = cart.find(value => value.userId === userId  && value.productId !== productId); 
+    let item = cart.find(value => value.userId === userId  && value.productId === productId); 
+    // console.log('db update:', cart); 
     if(item) {
         item.quantity = quantity;  
     }    
     return item;
 }
 
-export function clearCart() {
-    cart = [];
+export function clearCart(userId: string) {
+    cart = cart.filter(item => item.userId !== userId);
     return cart;
 }

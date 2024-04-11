@@ -27,15 +27,18 @@ export function removeById(req: Request, res: Response) {
 }
 
 export function updateQuantity(req: Request, res: Response) {
-    const userId = req.params["userId"];
-    const productId = req.params["productId"];
-    const quantity = +req.params["quantity"];
-    console.log('update', userId, productId, quantity);
+    const { userId, productId, quantity } = req.body;    
     const item = updateQuantityItem(userId, productId, quantity);
-    res.status(200).json(item);
+    if(item) {
+        res.status(200).json(item);
+    } else {
+        res.status(500).json({ status: 500, message: 'Во время обновления произошла ошибка' })
+    }
+
 }
 
 export function clear(req: Request, res: Response) {
-    const cart = clearCart();
+    const userId = req.params["userId"];
+    const cart = clearCart(userId);
     res.status(200).json(cart);
 }

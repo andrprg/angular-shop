@@ -50,7 +50,7 @@ content-type: application/json
 
 {
     "userId": "1",
-    "productId": "3",
+    "productId": "2",
     "quantity": 123
 }
 
@@ -63,9 +63,15 @@ DELETE http://localhost:9000/removebyid/1/2 HTTP/1.1
 content-type: application/json
 
 ### update quantity
-PATCH http://localhost:9000/updatequantity/1/2/444 HTTP/1.1
+PATCH http://localhost:9000/updatequantity HTTP/1.1
 content-type: application/json
 
+{
+    "userId": "1",
+    "productId": "2",
+    "quantity": 444
+}
+
 ### clear cart
-DELETE http://localhost:9000/clearcart HTTP/1.1
+DELETE http://localhost:9000/clearcart/1 HTTP/1.1
 content-type: application/json
