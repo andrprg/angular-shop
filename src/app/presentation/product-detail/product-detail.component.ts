@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/domain/product';
 import { Observable } from 'rxjs';
 import { ProductsService } from 'src/app/repository/products.service';
@@ -12,8 +12,9 @@ import { RatingComponent } from 'src/app/ui/rating/rating.component';
 import { RubPipe } from 'src/app/core/pipes/rub.pipe';
 import { MatDividerModule } from '@angular/material/divider';
 import { ProductCounterComponent } from 'src/app/ui/product-counter/product-counter.component';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { Item } from 'src/app/domain/items';
+import { CartService } from 'src/app/application/cart.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -38,16 +39,42 @@ export class ProductDetailComponent {
   readonly breakpoints = Breakpoints;
   layoutType$!: Observable<string>;
 
+  item: Item;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private productsService: ProductsService,
     private spinnerService: SpinnerService,
     private layoutService: LayoutService,
+    private cartService: CartService,
+    private router: Router
   ) {
     const id = this.activatedRoute.snapshot.params['id'];
     const product = this.productsService.getProductById(id);
     this.product$ = this.spinnerService.showLoaderUntilCompleted(product);
 
     this.layoutType$ = this.layoutService.layoutType$;
+
+    this.item = {
+      productId: id,
+      quantity: 1
+    }
   }
+
+  /**
+   * Изменение количества в корзине
+   * @param $event 
+   */
+  onChangeQuantity($event: number) {    
+    this.item = {
+      ...this.item,
+      quantity: $event
+    };
+  }
+
+  onAddToCart() {
+    this.cartService.addToCart(this.item);
+    this.router.navigate(['/home']);
+  }
+
 }

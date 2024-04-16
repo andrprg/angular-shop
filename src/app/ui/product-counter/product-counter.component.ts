@@ -14,9 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class ProductCounterComponent {
 
-  @Output() eventIncrement = new EventEmitter<number>();
-  @Output() eventDecrement = new EventEmitter<number>();
-
+  @Output() eventQuantity = new EventEmitter<number>();
+  
   /**
    * Количество товара
    */
@@ -24,13 +23,13 @@ export class ProductCounterComponent {
 
   increment() {
     ++this.productCount;
-    this.eventIncrement.next(this.productCount);
+    this.eventQuantity.next(this.productCount);
   }
 
   decrement() {
     if(this.productCount > 1) {
       --this.productCount;
-      this.eventDecrement.next(this.productCount);
+      this.eventQuantity.next(this.productCount);
     } 
   }
 }

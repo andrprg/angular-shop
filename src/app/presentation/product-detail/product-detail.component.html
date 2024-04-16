@@ -13,9 +13,9 @@
         <mat-divider></mat-divider>
         <div class="container__counter-label">
             <span class="counter__label">Количество:</span>
-            <app-product-counter></app-product-counter> 
-        </div>        
+            <app-product-counter (eventQuantity)="onChangeQuantity($event)"></app-product-counter>
+        </div>
         <mat-divider></mat-divider>
-        <button class="container__btn-add" mat-flat-button color="primary">Добавить в корзину</button>
+        <button class="container__btn-add" mat-flat-button color="primary" (click)="onAddToCart()">Добавить в корзину</button>
     </div>
 </div>
