@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CartService } from 'src/app/application/cart.service';
 import { Observable, map } from 'rxjs';
 import {MatBadgeModule} from '@angular/material/badge';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-button-cart',
@@ -12,6 +13,7 @@ import {MatBadgeModule} from '@angular/material/badge';
     CommonModule,
     MatIconModule,
     MatBadgeModule,
+    RouterLink
   ],
   templateUrl: './button-cart.component.html',
   styleUrls: ['./button-cart.component.scss']
