@@ -3,8 +3,10 @@ import { AuthService } from '../repository/auth.service';
 import { LocalCartService } from '../repository/local-cart.service';
 import { RemoteCartService } from '../repository/remote-cart.service';
 import { User } from '../domain/user';
-import { Observable, Subject, iif, mergeMap, takeUntil } from 'rxjs';
+import { Observable, Subject, filter, iif, mergeMap, switchMap, takeUntil, tap } from 'rxjs';
 import { Item } from '../domain/items';
+import { isNotNullOrUndefined } from '../core/helper';
+import { SpinnerService } from '../ui/spinner/spinner.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,9 @@ export class CartService implements OnDestroy {
     private authService: AuthService,
     private localCartService: LocalCartService,
     private remoteCartService: RemoteCartService,
+    private spinnerService: SpinnerService,
   ) {
+    // Подписываемся на корзину
     this.items$ = this.authService.user$.pipe(
       mergeMap(
         user =>
@@ -30,6 +34,14 @@ export class CartService implements OnDestroy {
           )
       )
     );
+    
+    // Получаем корзину с сервера
+    const remoteCart$ = this.authService.user$.pipe(
+      isNotNullOrUndefined<User>(),
+      switchMap((user: User) => this.remoteCartService.fetchCart(user.id))
+    );
+    this.spinnerService.showLoaderUntilCompleted(remoteCart$).subscribe();
+
   }
 
   ngOnDestroy(): void {

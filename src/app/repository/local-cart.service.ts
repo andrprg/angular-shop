@@ -24,8 +24,8 @@ export class LocalCartService {
   /**
  * Получаем корзину покупок
  */
-  fetchCart(): Item[] {
-    return this.localStorageService.getItemValue<Item[]>('cart') ?? [];
+  fetchCart(): Observable<Item[]> {
+    return this.localStorageService.getItem<Item[]>('cart');
   }
 
   /**

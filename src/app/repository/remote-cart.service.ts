@@ -25,16 +25,14 @@ export class RemoteCartService {
    * Получаем корзину покупок
    * @param userId 
    */
-  fetchCart(userId: string): void {
-    const items$ = this.apiCommonService.get<Item[]>(`/fetchCart/${userId}`).pipe(
+  fetchCart(userId: string): Observable<Item[]> {
+    return this.apiCommonService.get<Item[]>(`/fetchCart/${userId}`).pipe(
       catchError(err => {
         this.messagesService.showErrors('Ошибка при загрузке корзины покупок.');
         return of([]);
       }),
       tap(items => this.subject.next(items))
     );
-    
-    this.spinnerService.showLoaderUntilCompleted(items$).subscribe();
   }
 
   /**
