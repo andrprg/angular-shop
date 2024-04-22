@@ -1,9 +1,10 @@
-<div class="counter">
-    <span class="counter__minus counter__btn" (click)="decrement()">
+<div class="counter" *ngIf="product">
+    <button class="counter__minus counter__btn" (click)="decrement()">
         <mat-icon fontIcon="remove"></mat-icon>
-    </span>
+    </button>
     <span class="counter__value">{{productCount}}</span>
-    <span class="counter__plus counter__btn" (click)="increment()">
+    <button class="counter__plus counter__btn" (click)="increment()"
+        [disabled]="productCount >= product.availableQuantity">
         <mat-icon fontIcon="add"></mat-icon>
-    </span>
-  </div>
+    </button>
+</div>

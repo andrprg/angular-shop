@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { Product } from 'src/app/domain/product';
 
 @Component({
   selector: 'app-product-counter',
@@ -10,10 +11,12 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
   ],
   templateUrl: './product-counter.component.html',
-  styleUrls: ['./product-counter.component.scss']
+  styleUrls: ['./product-counter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductCounterComponent {
 
+  @Input({required: true}) product?: Product | null;
   @Output() eventQuantity = new EventEmitter<number>();
   
   /**
