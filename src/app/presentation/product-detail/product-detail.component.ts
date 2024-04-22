@@ -15,6 +15,7 @@ import { ProductCounterComponent } from 'src/app/ui/product-counter/product-coun
 import { MatButtonModule } from '@angular/material/button';
 import { Item } from 'src/app/domain/items';
 import { CartService } from 'src/app/application/cart.service';
+import { inputIsNotNullOrUndefined } from 'src/app/core/helper';
 
 @Component({
   selector: 'app-product-detail',
@@ -35,7 +36,7 @@ import { CartService } from 'src/app/application/cart.service';
 })
 export class ProductDetailComponent {
 
-  product$!: Observable<Product>;
+  product$: Observable<Product>;
   readonly breakpoints = Breakpoints;
   layoutType$!: Observable<string>;
 
