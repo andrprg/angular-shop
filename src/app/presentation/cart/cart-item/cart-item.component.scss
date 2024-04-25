@@ -1,0 +1,32 @@
+.cartitem {
+    display: grid;
+    grid-template-columns: 35% 1fr;
+    grid-template-areas: "image title" "image price" "image counter";
+    max-height: 200px;
+    background-color: var(--color-EDE9EF);
+    border-radius: 0.4rem;
+    padding: 1rem;
+
+    &__image {
+        grid-area: image;
+        max-height: inherit;
+    }
+
+    &__title {
+        grid-area: title;
+    }
+
+    &__price {
+        grid-area: price;
+    }
+
+    &__counter {
+        grid-area: counter;
+        display: flex;
+        align-items: self;
+        align-items: center;
+        height: fit-content;
+    }
+
+    
+}

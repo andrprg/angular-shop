@@ -1,0 +1,11 @@
+<ng-container *ngIf="(product$ | async) as product">
+    <div class="cartitem">
+        <img mat-card-image class="cartitem__image" [src]="product.imageUrl | hostUrl" alt="">
+        <h1 class="cartitem__title">{{product.title}}</h1>
+        <h1 class="cartitem__price">{{product.price}}</h1>
+        <div class="cartitem__counter">
+            <app-product-counter class="cartitem__counter" [product]="product" (eventQuantity)="onChangeQuantity($event)"></app-product-counter>
+            <app-button-delete [productId]="item.productId" (eventSelect)="onRemoveProductFromCart($event)"></app-button-delete>
+        </div>        
+    </div>
+</ng-container>
