@@ -1,25 +1,18 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, filter, map, of } from 'rxjs';
 import { Item } from '../domain/items';
 import { LocalStorageService } from './local-storage.service';
 import { ProductID } from '../domain/product';
+import { inputIsNotNullOrUndefined, isNotNullOrUndefined } from '../core/helper';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalCartService {
 
-  items$: Observable<Item[]>;
-
   constructor(
     private localStorageService: LocalStorageService,
-  ) {
-    this.items$ = this.localStorageService.getItem<Item[]>('cart')
-      .pipe(
-        map(value => value ?? [])
-      );
-
-  }
+  ) { }
 
   /**
  * Получаем корзину покупок
@@ -33,30 +26,38 @@ export class LocalCartService {
    * @param item 
    * @returns 
    */
-  addToCart(item: Item): void {
+  addToCart(item: Item): Observable<Item | null> {
     const items: Item[] = this.localStorageService.getItemValue<Item[]>('cart') ?? [];
-    if (items.some(value => value.productId === item.productId)) return;
+    if (items.some(value => value.productId === item.productId)) return of(null);
     this.localStorageService.setItem('cart', [...items, item]);
+    return of(item);
   }
 
   /**
    * Обновляем продукт в корзине
    * @param item 
    */
-  updateItem(item: Item): void {
-    const items: Item[] = (this.localStorageService.getItemValue<Item[]>('cart') ?? [])
-      .filter(value => value.productId !== item.productId);
-    this.localStorageService.setItem('cart', [...items, item]);
+  updateItem(item: Item): Observable<Item | null> {
+    const arr = this.localStorageService.getItemValue<Item[]>('cart') || [];
+    const cartItem = arr.find(value => value.productId === item.productId);
+    if (cartItem) {
+      cartItem.quantity = item.quantity;
+      this.localStorageService.setItem('cart', arr);
+    }
+    return of(cartItem ?? null);
   }
 
   /**
    * Удаляем продукт из корзины
    * @param productId 
    */
-  deleteItem(productId: ProductID): void {
+  deleteItem(productId: ProductID): Observable<Item> {
+    const deleteItem = (this.localStorageService.getItemValue<Item[]>('cart'))    
+        .find(items => items.productId === productId);    
     const items: Item[] = (this.localStorageService.getItemValue<Item[]>('cart') ?? [])
       .filter(value => value.productId !== productId);
     this.localStorageService.setItem('cart', items);
+    return of(deleteItem).pipe(isNotNullOrUndefined<Item>());
   }
 
   /**
