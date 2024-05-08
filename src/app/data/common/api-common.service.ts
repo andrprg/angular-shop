@@ -70,7 +70,7 @@ export class ApiCommonService {
    * @param options 
    * @returns 
    */
-  post<T>(url: string, body?: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
+  post<T>(url: string, body?: Record<string, any>, options?: Partial<ApiRequestOptions>): Observable<T> {
     return this._http
       .post<T>(this.makeUrl(url), body ?? null, this.getApiRequestOptions(options));
   }
@@ -82,7 +82,7 @@ export class ApiCommonService {
  * @param options 
  * @returns 
  */
-  patch<T>(url: string, body: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
+  patch<T>(url: string, body: Record<string, any>, options?: Partial<ApiRequestOptions>): Observable<T> {
     return this._http.patch<T>(this.makeUrl(url), body, this.getApiRequestOptions(options));
   }
 
@@ -93,7 +93,7 @@ export class ApiCommonService {
 * @param options 
 * @returns 
 */
-  put<T>(url: string, body: unknown | null, options?: Partial<ApiRequestOptions>): Observable<T> {
+  put<T>(url: string, body: Record<string, any>, options?: Partial<ApiRequestOptions>): Observable<T> {
     return this._http.put<T>(this.makeUrl(url), body, this.getApiRequestOptions(options));
   }
 
