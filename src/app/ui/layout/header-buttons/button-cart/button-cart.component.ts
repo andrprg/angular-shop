@@ -20,11 +20,11 @@ import { RouterLink } from '@angular/router';
 })
 export class ButtonCartComponent {
 
-  total$: Observable<number>;
+  count$: Observable<number>;
 
   constructor(
     public cartService: CartService
   ) {
-    this.total$ = this.cartService.items$.pipe(map(items => items.length));
+    this.count$ = this.cartService.count$;
   }
 }
