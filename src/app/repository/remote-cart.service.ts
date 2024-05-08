@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, of, shareReplay, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, shareReplay, tap, throwError } from 'rxjs';
 import { Item } from '../domain/items';
 import { ApiCommonService } from '../data/common/api-common.service';
 import { ProductID } from '../domain/product';
@@ -31,7 +31,6 @@ export class RemoteCartService {
         this.messagesService.showErrors('Ошибка при загрузке корзины покупок.');
         return of([]);
       }),
-      tap(items => this.subject.next(items))
     );
   }
 
@@ -40,60 +39,48 @@ export class RemoteCartService {
    * @param item 
    * @returns 
    */
-  addToCart(userId: string, item: Item): void {
-    const item$ = this.apiCommonService.post<Item>(`/addToCart`, {userId, productId: item.productId, quantity: item.quantity}).pipe(
+  addToCart(userId: string, item: Item): Observable<Item> {
+    return this.apiCommonService.post<Item>(`/addToCart`, {userId, price: item.price, productId: item.productId, quantity: item.quantity}).pipe(
       catchError(err => {
         this.messagesService.showErrors(err.error.message);
-        return of(null);
+        return of();
       }),
-      tap(item => {
-        item && this.subject.next([...this.subject.getValue(), item]);
-      })
     );
-    
-    this.spinnerService.showLoaderUntilCompleted(item$).subscribe();
-
   }
 
     /**
    * Удаляем продукт из корзины
+   * @param userId
    * @param productId 
    */
-    deleteItem(userId: string, productId: ProductID): void {
-      const items$ = this.apiCommonService.delete<Item[]>(`/removebyid/${userId}/${productId}`).pipe(
-        catchError(err => {   
+    deleteItem(userId: string, productId: ProductID): Observable<Item> {
+      return this.apiCommonService.delete<Item>(`/removebyid/${userId}/${productId}`).pipe(
+         catchError(err => {   
           this.messagesService.showErrors('Ошибка при удаления товара из корзины');
-          return of(null);
+          return of();
         }),
-        tap(item => {
-          if(item) {
-            const cart = this.subject.getValue().filter(product => product.productId !== productId)
-            this.subject.next(cart);
-          }
-          
-        })
       );
-      
-      this.spinnerService.showLoaderUntilCompleted(items$).subscribe();
     }
 
   /**
    * Обновляем количество продукта в корзине
    * @param item 
    */
-  updateQuantity(userId: string, item: Item): void {
-    const item$ = this.apiCommonService.patch<Item>(`/updatequantity`, {userId, productId: item.productId, quantity: item.quantity}).pipe(
+  updateQuantity(userId: string, item: Item): Observable<Item | null> {
+    return this.apiCommonService.patch<Item>(`/updatequantity`, {userId, productId: item.productId,  quantity: item.quantity}).pipe(
       catchError(err => {
         this.messagesService.showErrors(err.error.message);
         return of(null);
       }),
       tap(item => {
-        const arr = this.subject.getValue().filter(item => item.productId !== item.productId);
-        item && this.subject.next([...arr, item]);
+        const arr = this.subject.getValue();
+        const idx = this.subject.getValue().findIndex(item => item.productId === item.productId);
+        if(idx >= 0 && item) {
+          arr[idx] = item;          
+        }
       })
     );
-    
-    this.spinnerService.showLoaderUntilCompleted(item$).subscribe();
+
   }
 
 

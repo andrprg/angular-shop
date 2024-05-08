@@ -1,19 +1,35 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { DestroyRef, Injectable, OnDestroy, inject } from '@angular/core';
 import { AuthService } from '../repository/auth.service';
 import { LocalCartService } from '../repository/local-cart.service';
 import { RemoteCartService } from '../repository/remote-cart.service';
 import { User } from '../domain/user';
-import { Observable, Subject, filter, iif, mergeMap, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, concatMap, filter, first, iif, map, mergeMap, reduce, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 import { Item } from '../domain/items';
 import { isNotNullOrUndefined } from '../core/helper';
 import { SpinnerService } from '../ui/spinner/spinner.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Injectable({
   providedIn: 'root'
 })
-export class CartService implements OnDestroy {
+export class CartService {
 
-  items$: Observable<Item[]>;
+  destroyRef = inject(DestroyRef);
+
+  private subject = new BehaviorSubject<Item[]>([]);
+  items$: Observable<Item[]> = this.subject.asObservable().pipe(
+    shareReplay()
+  );
+
+  /**
+   * Сумма заказа
+   */
+  totalSum$!: Observable<number>;
+
+  /**
+   * Общее количество
+   */
+  count$: Observable<number>;
 
   destroy$ = new Subject<boolean>();
 
@@ -23,66 +39,92 @@ export class CartService implements OnDestroy {
     private remoteCartService: RemoteCartService,
     private spinnerService: SpinnerService,
   ) {
-    // Подписываемся на корзину
-    this.items$ = this.authService.user$.pipe(
-      mergeMap(
-        user =>
-          iif(
-            () => !!user,
-            this.remoteCartService.items$,
-            this.localCartService.items$
-          )
-      )
+    this.authService.user$.pipe(takeUntilDestroyed()).subscribe(_ => this.fetchcart());
+
+    // Расчитываем общую сумму заказа
+    this.totalSum$ = this.items$.pipe(
+      map(items => items.reduce((acc, next) => acc + (next.price * next.quantity), 0))
     );
-    
-    // Получаем корзину с сервера
-    const remoteCart$ = this.authService.user$.pipe(
-      isNotNullOrUndefined<User>(),
-      switchMap((user: User) => this.remoteCartService.fetchCart(user.id))
+
+    // Получаем общее количество
+    this.count$ = this.items$.pipe(
+      map(items => items?.length ?? 0),
     );
-    this.spinnerService.showLoaderUntilCompleted(remoteCart$).subscribe();
+
+    this.fetchcart();
 
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
-
-
+  /**
+   * Получаем корзину
+   */
   fetchcart() {
+    let items: Observable<Item[]>;
     const user = this.authService.user;
     if (user) {
-      return this.remoteCartService.fetchCart(user.id);
+      items = this.remoteCartService.fetchCart(user.id);
     } else {
-      return this.localCartService.fetchCart();
+      items = this.localCartService.fetchCart();
     }
+
+    this.spinnerService.showLoaderUntilCompleted(items)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(data => {
+        this.subject.next(data);
+        console.log('fetch', !!user, data);
+      });
+
   }
 
-  addToCart(item: Item) {
+  /**
+   * Добавляем товар в корзину
+   * @param item 
+   * @returns 
+   */
+  addToCart(item: Item): void {
+    let addItem: Observable<Item | null>;
     const user = this.authService.user;
     if (user) {
-      return this.remoteCartService.addToCart(user.id, item);
+      addItem = this.remoteCartService.addToCart(user.id, item);
     } else {
-      return this.localCartService.addToCart(item);
+      addItem = this.localCartService.addToCart(item);
     }
+
+    this.spinnerService.showLoaderUntilCompleted(addItem)
+      .pipe(
+        isNotNullOrUndefined<Item>(),
+        first()
+      )
+      .subscribe(data => this.subject.next([...this.getItems(), data])
+      );
+
   }
 
-  deleteItem(item: Item) {
+  deleteItem(item: Item): void {
+    let deleteItem: Observable<Item>;
     const user = this.authService.user;
     if (user) {
-      return this.remoteCartService.deleteItem(user.id, item.productId);
+      deleteItem = this.remoteCartService.deleteItem(user.id, item.productId);
     } else {
-      return this.localCartService.deleteItem(item.productId);
+      deleteItem = this.localCartService.deleteItem(item.productId);
     }
+
+    this.spinnerService.showLoaderUntilCompleted(deleteItem)
+      .pipe(
+        first()
+      ).subscribe(data => {
+        const newArr = this.getItems().filter(item => item.productId !== data.productId);
+        this.subject.next(newArr);
+      }
+      );
   }
 
-  updateQuantity(item: Item) {
+  updateQuantity(item: Item): Observable<Item | null> {
     const user = this.authService.user;
     if (user) {
       return this.remoteCartService.updateQuantity(user.id, item);
     } else {
-      return this.localCartService.updateItem(item);
+      return  this.localCartService.updateItem(item);
     }
   }
 
@@ -93,6 +135,10 @@ export class CartService implements OnDestroy {
     } else {
       return this.localCartService.clear();
     }
+  }
+
+  getItems(): Item[] {
+    return this.subject.getValue();
   }
 
 

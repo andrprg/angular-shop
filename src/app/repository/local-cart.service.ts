@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, filter, map, of } from 'rxjs';
 import { Item } from '../domain/items';
 import { LocalStorageService } from './local-storage.service';
 import { ProductID } from '../domain/product';
-import { inputIsNotNullOrUndefined, isNotNullOrUndefined } from '../core/helper';
+import { isNotNullOrUndefined } from '../core/helper';
 
 @Injectable({
   providedIn: 'root'
@@ -39,12 +39,12 @@ export class LocalCartService {
    */
   updateItem(item: Item): Observable<Item | null> {
     const arr = this.localStorageService.getItemValue<Item[]>('cart') || [];
-    const cartItem = arr.find(value => value.productId === item.productId);
-    if (cartItem) {
-      cartItem.quantity = item.quantity;
-      this.localStorageService.setItem('cart', arr);
+    let idx = arr.findIndex(value => value.productId === item.productId);
+    if (idx >= 0) {
+      arr[idx] = item;
+      this.localStorageService.setItem('cart', [...arr]);
     }
-    return of(cartItem ?? null);
+    return of(arr[idx] ?? null);
   }
 
   /**

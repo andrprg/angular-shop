@@ -26,12 +26,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
   ]
 })
-export class AppComponent implements OnDestroy {
-
-  /**
- * Subject для отписки
- */
-  destroy$ = new Subject<boolean>();
+export class AppComponent {
 
   readonly breakpoints = Breakpoints;
 
@@ -41,12 +36,7 @@ export class AppComponent implements OnDestroy {
   constructor(
     private layoutService: LayoutService
   ) {
-    this.layoutType$ = this.layoutService.layoutType$;
-    
+    this.layoutType$ = this.layoutService.layoutType$;    
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.complete();
-  }
 }
