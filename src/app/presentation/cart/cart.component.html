@@ -1,5 +1,9 @@
-<div class="cart">
-    <div class="cart__list"></div>
-    <div class="cart__checkout"></div>
-</div>
-<mat-card class="container-cart"  fxLayout="row" fxLayoutAlign="start start"></mat-card>
+<ng-container *ngIf="(items$ | async) as items">
+    <div 
+    [ngClass]="(layoutType$ | async) === breakpoints.XSmall ? 'cart-xsmall' :  'cart'">
+        <div class="cart__list">
+            <app-cart-item  *ngFor="let item of items" [item]="item"></app-cart-item>  
+        </div>
+        <app-cart-total class="cart__checkout"></app-cart-total>
+    </div>
+</ng-container>
