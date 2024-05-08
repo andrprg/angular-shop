@@ -22,14 +22,13 @@ export class HomeComponent implements OnInit {
   products$!: Observable<Product[]>;
 
   constructor(
-    private spinnerService: SpinnerService,
     public productsService: ProductsService,
   ) {    
   }
 
   ngOnInit(): void {
-    const products = this.productsService.getProducts();
-    this.products$ = this.spinnerService.showLoaderUntilCompleted(products);
+    this.products$ = this.productsService.products$;
+    this.productsService.getProducts();
   }
 
   trackByFn(index: number, product: Product): string {
