@@ -68,7 +68,7 @@ content-type: application/json
 
 {
     "userId": "1",
-    "productId": "2",
+    "productId": "1",
     "quantity": 444
 }
 

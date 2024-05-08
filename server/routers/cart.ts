@@ -3,10 +3,10 @@ import { cart, clearCart, removeItem, updateQuantityItem } from '../db/db-cart';
 
 
 export function addToCart(req: Request, res: Response) {
-    const { userId, productId, quantity } = req.body;
+    const { userId, productId, price, quantity } = req.body;
     const index = cart.findIndex(item =>item.userId === userId && item.productId === productId);
     if(index < 0) {
-        cart.push({ userId, productId, quantity });
+        cart.push({ userId, productId, price, quantity });
         res.status(200).json({ userId, productId, quantity });    
     } else {
         res.status(500).json({ status: 500, message: 'Продукт уже есть в корзине' })
@@ -15,7 +15,7 @@ export function addToCart(req: Request, res: Response) {
 
 export function fetchCart(req: Request, res: Response) {
     const userId = req.params["userId"];
-    const cartByUserId = cart.filter(value => value.userId === userId);
+    const cartByUserId = cart.filter(value => value.userId == userId);
     res.status(200).json(cartByUserId);    
 }
 
@@ -23,7 +23,12 @@ export function removeById(req: Request, res: Response) {
     const userId = req.params["userId"];
     const productId = req.params["productId"];
     const cartByUserId = removeItem(userId, productId);
-    res.status(200).json(cartByUserId);
+    if(cartByUserId) {
+        res.status(200).json(cartByUserId);
+    } else {
+        res.status(500).json({ status: 500, message: 'Ошибка во время удаления товара' })
+    }
+    
 }
 
 export function updateQuantity(req: Request, res: Response) {

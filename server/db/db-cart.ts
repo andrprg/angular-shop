@@ -2,6 +2,7 @@
 interface Item {
     userId: string;
     productId: string;
+    price: number;
     quantity: number;
 }
 
@@ -26,17 +27,18 @@ export let cart: Item[] = [
 ]
 
 export function removeItem(userId: string, productId: string) {
+    const deleteItem = cart.find(value => value.userId === userId  && value.productId === productId);
     cart = cart.filter(value => value.userId === userId  && value.productId !== productId);   
-    return cart;
+    return deleteItem;
 }
 
 export function updateQuantityItem(userId: string, productId: string, quantity: number) {
     let item = cart.find(value => value.userId === userId  && value.productId === productId); 
-    // console.log('db update:', cart); 
-    if(item) {
+    if(item && quantity > 0 ) {
         item.quantity = quantity;  
+        return item;
     }    
-    return item;
+    return;    
 }
 
 export function clearCart(userId: string) {
