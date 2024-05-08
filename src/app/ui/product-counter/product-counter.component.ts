@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Product } from 'src/app/domain/product';
+import { CartService } from 'src/app/application/cart.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-product-counter',
@@ -16,23 +18,35 @@ import { Product } from 'src/app/domain/product';
 })
 export class ProductCounterComponent {
 
-  @Input({required: true}) product?: Product | null;
-  @Output() eventQuantity = new EventEmitter<number>();
-  
+  destroyRef = inject(DestroyRef);
+
+  @Input({ required: true }) product!: Product;
   /**
-   * Количество товара
-   */
-  productCount: number = 1;
+ * Количество товара
+ */
+  @Input() productCount: number = 1;
+
+  constructor(
+    private cartService: CartService
+  ) { }
 
   increment() {
     ++this.productCount;
-    this.eventQuantity.next(this.productCount);
+    this.cartService.updateQuantity({
+      productId: this.product.id,
+      price: this.product.price,
+      quantity: this.productCount
+    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe()
   }
 
   decrement() {
-    if(this.productCount > 1) {
+    if (this.productCount > 1) {
       --this.productCount;
-      this.eventQuantity.next(this.productCount);
-    } 
+      this.cartService.updateQuantity({
+        productId: this.product.id,
+        price: this.product.price,
+        quantity: this.productCount
+      }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe()
+    }
   }
 }

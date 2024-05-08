@@ -10,6 +10,7 @@ import { ProductCounterComponent } from 'src/app/ui/product-counter/product-coun
 import { ButtonDeleteComponent } from '../button-delete/button-delete.component';
 import { MatIconModule } from '@angular/material/icon';
 import { CartService } from 'src/app/application/cart.service';
+import { RubPipe } from 'src/app/core/pipes/rub.pipe';
 
 @Component({
   selector: 'app-cart-item',
@@ -19,6 +20,7 @@ import { CartService } from 'src/app/application/cart.service';
     HostUrlPipe,
     ProductCounterComponent,
     ButtonDeleteComponent,
+    RubPipe
   ],
   templateUrl: './cart-item.component.html',
   styleUrls: ['./cart-item.component.scss']
@@ -40,7 +42,13 @@ export class CartItemComponent implements OnInit {
     this.product$ = this.spinnerService.showLoaderUntilCompleted(products);
   }
 
-  onChangeQuantity(event: number) {}
+  onChangeQuantity(event: number) {
+    this.cartService.updateQuantity({
+      ...this.item,
+      quantity: event
+    })
+
+  }
 
   onRemoveProductFromCart(productId: ProductID) {
     this.cartService.deleteItem(this.item);
