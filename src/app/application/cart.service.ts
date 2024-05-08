@@ -71,9 +71,7 @@ export class CartService {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(data => {
         this.subject.next(data);
-        console.log('fetch', !!user, data);
       });
-
   }
 
   /**
@@ -119,22 +117,41 @@ export class CartService {
       );
   }
 
-  updateQuantity(item: Item): Observable<Item | null> {
+  updateQuantity(item: Item): void {
+    let updateItem$: Observable<Item | null>;
     const user = this.authService.user;
     if (user) {
-      return this.remoteCartService.updateQuantity(user.id, item);
+      console.log('upd-1');
+      updateItem$ = this.remoteCartService.updateQuantity(user.id, item).pipe(
+        tap(item => {
+          const arr = this.subject.getValue();
+          const idx = this.subject.getValue().findIndex(item => item.productId === item.productId);
+          if(idx >= 0 && item) {
+            arr[idx] = item;          
+            this.subject.next([...arr]);
+          }
+        })
+      );
     } else {
-      return  this.localCartService.updateItem(item);
+      updateItem$ = this.localCartService.updateItem(item);
     }
+    this.spinnerService.showLoaderUntilCompleted(updateItem$)
+    .pipe(first())
+    .subscribe();
   }
 
-  clear() {
+  clear(): void {
+    let result$: Observable<Item[] | null>
     const user = this.authService.user;
     if (user) {
-      return this.remoteCartService.clear(user.id);
+      result$ = this.remoteCartService.clear(user.id);
     } else {
-      return this.localCartService.clear();
+      result$ = this.localCartService.clear();
     }
+    this.spinnerService.showLoaderUntilCompleted(result$)
+    .pipe(first())
+    .subscribe();
+  
   }
 
   getItems(): Item[] {

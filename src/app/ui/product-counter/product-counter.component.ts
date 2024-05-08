@@ -36,7 +36,7 @@ export class ProductCounterComponent {
       productId: this.product.id,
       price: this.product.price,
       quantity: this.productCount
-    }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe()
+    });
   }
 
   decrement() {
@@ -46,7 +46,7 @@ export class ProductCounterComponent {
         productId: this.product.id,
         price: this.product.price,
         quantity: this.productCount
-      }).pipe(takeUntilDestroyed(this.destroyRef)).subscribe()
+      });
     }
   }
 }
