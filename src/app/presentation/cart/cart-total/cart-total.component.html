@@ -1,0 +1,7 @@
+<div *ngIf="(totalSum$ | async) as sum">
+    <h2 class="total-sum">Всего: {{sum | rub}}</h2>
+    <button mat-raised-button color="primary">Оформить</button>
+</div>
+
+
+
