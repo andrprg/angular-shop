@@ -58,6 +58,7 @@ export class ProductDetailComponent {
 
     this.item = {
       productId: id,
+      price: 0, 
       quantity: 1
     }
   }
@@ -73,7 +74,11 @@ export class ProductDetailComponent {
     };
   }
 
-  onAddToCart() {
+  onAddToCart(product: Product) {
+    this.item = {
+      ...this.item,
+      price: product.price, 
+    };
     this.cartService.addToCart(this.item);
     this.router.navigate(['/home']);
   }
