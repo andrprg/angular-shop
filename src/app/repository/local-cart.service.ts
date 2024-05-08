@@ -63,7 +63,8 @@ export class LocalCartService {
   /**
    * Очищаем корзину
    */
-  clear() {
+  clear(): Observable<Item[]> {
     this.localStorageService.clear();
+    return of([]);
   }
 }

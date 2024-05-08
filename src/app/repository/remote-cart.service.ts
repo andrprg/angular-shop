@@ -11,8 +11,6 @@ import { MessagesService } from '../ui/messages/messages.service';
 })
 export class RemoteCartService {
 
-  private subject = new BehaviorSubject<Item[]>([]);
-  items$ = this.subject.asObservable();
 
   constructor(
     private apiCommonService: ApiCommonService,
@@ -71,13 +69,6 @@ export class RemoteCartService {
       catchError(err => {
         this.messagesService.showErrors(err.error.message);
         return of(null);
-      }),
-      tap(item => {
-        const arr = this.subject.getValue();
-        const idx = this.subject.getValue().findIndex(item => item.productId === item.productId);
-        if(idx >= 0 && item) {
-          arr[idx] = item;          
-        }
       })
     );
 
@@ -89,18 +80,11 @@ export class RemoteCartService {
    * Очищаем корзину
    */
   clear(userId: string) {
-    const items$ = this.apiCommonService.delete<Item[]>(`/clearcart/${userId}`).pipe(
+    return this.apiCommonService.delete<Item[]>(`/clearcart/${userId}`).pipe(
       catchError(err => { 
         this.messagesService.showErrors('Ошибка при удаления товара из корзины');
         return of(null);
-      }),
-      tap(item => {
-        if(item) {
-          this.subject.next([]);
-        }        
       })
     );
-    
-    this.spinnerService.showLoaderUntilCompleted(items$).subscribe();
   }
 }
