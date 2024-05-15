@@ -1,53 +1,41 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
-import { MessagesService } from 'src/app/ui/messages/messages.service';
+import { Observable } from 'rxjs';
 import { HOST_URL } from 'src/environments/environment';
 
 export interface ApiRequestOptions {
-  headers: Record<string, any>;
-  params: Record<string, any>;
-  reportProgress: boolean;
-  observe: any;
-  responseType: any;
-  withCredentials: boolean;
+  params: HttpParams;
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiCommonService {
-
-
-  constructor(
-    private _http: HttpClient,
-    private messagesService: MessagesService
-  ) { }
+  constructor(private _http: HttpClient) {}
 
   /**
    * Получаем параметры запроса
    * @param объект типа Partial<ApiRequestOptions>
-   * @returns 
+   * @returns
    */
-  getApiRequestOptions(options?: Partial<ApiRequestOptions>): Partial<ApiRequestOptions> | undefined {
+  getApiRequestOptions(options?: {
+    params: Record<string, string>;
+  }): Partial<ApiRequestOptions> | undefined {
     if (!options) {
-      return
+      return;
     }
-    let headers: Record<string, any> = {};
-    let params: Record<string, any> = {};
-    if (options.headers) {
-      headers = !(options?.headers instanceof HttpHeaders) ? new HttpHeaders(options.headers) : options.headers;
-    }
+    let params: HttpParams;
     if (options.params) {
       params = new HttpParams({ fromObject: options.params });
+      return { ...options, params };
     }
-    return { ...options, params, headers };
+    return;
   }
 
   /**
    * Создаем url
-   * @param url 
-   * @returns Полный путь 
+   * @param url
+   * @returns Полный путь
    */
   makeUrl(url: string): string {
     return url.indexOf('http') === 0 ? url : `${HOST_URL}${url}`;
@@ -55,55 +43,90 @@ export class ApiCommonService {
 
   /**
    * Gets http запрос
-   * @param url 
-   * @param options 
-   * @returns get 
+   * @param url
+   * @param options
+   * @returns get
    */
-  get<T>(url: string, options?: Partial<ApiRequestOptions>): Observable<T> {
-    return this._http.get<T>(this.makeUrl(url), this.getApiRequestOptions(options));
+  get<T>(
+    url: string,
+    options?: { params: Record<string, string> },
+  ): Observable<T> {
+    return this._http.get<T>(
+      this.makeUrl(url),
+      this.getApiRequestOptions(options),
+    );
   }
 
   /**
    * Posts http запрос
-   * @param url 
-   * @param body 
-   * @param options 
-   * @returns 
+   * @param url
+   * @param body
+   * @param options
+   * @returns
    */
-  post<T>(url: string, body?: Record<string, any>, options?: Partial<ApiRequestOptions>): Observable<T> {
-    return this._http
-      .post<T>(this.makeUrl(url), body ?? null, this.getApiRequestOptions(options));
+  post<T>(
+    url: string,
+    body?: unknown | null,
+    options?: { params: Record<string, string> },
+  ): Observable<T> {
+    return this._http.post<T>(
+      this.makeUrl(url),
+      body ?? null,
+      this.getApiRequestOptions(options),
+    );
   }
 
   /**
- * Patch http запрос
- * @param url 
- * @param body 
- * @param options 
- * @returns 
- */
-  patch<T>(url: string, body: Record<string, any>, options?: Partial<ApiRequestOptions>): Observable<T> {
-    return this._http.patch<T>(this.makeUrl(url), body, this.getApiRequestOptions(options));
+   * Patch http запрос
+   * @param url
+   * @param body
+   * @param options
+   * @returns
+   */
+  patch<T>(
+    url: string,
+    body: unknown | null,
+    options?: { params: Record<string, string> },
+  ): Observable<T> {
+    return this._http.patch<T>(
+      this.makeUrl(url),
+      body,
+      this.getApiRequestOptions(options),
+    );
   }
 
   /**
-* Put http запрос
-* @param url 
-* @param body 
-* @param options 
-* @returns 
-*/
-  put<T>(url: string, body: Record<string, any>, options?: Partial<ApiRequestOptions>): Observable<T> {
-    return this._http.put<T>(this.makeUrl(url), body, this.getApiRequestOptions(options));
+   * Put http запрос
+   * @param url
+   * @param body
+   * @param options
+   * @returns
+   */
+  put<T>(
+    url: string,
+    body: unknown | null,
+    options?: { params: Record<string, string> },
+  ): Observable<T> {
+    return this._http.put<T>(
+      this.makeUrl(url),
+      body,
+      this.getApiRequestOptions(options),
+    );
   }
 
   /**
- * Gets http запрос
- * @param url 
- * @param options 
- * @returns get 
- */
-  delete<T>(url: string, options?: Partial<ApiRequestOptions>): Observable<T> {
-    return this._http.delete<T>(this.makeUrl(url), this.getApiRequestOptions(options));
+   * Gets http запрос
+   * @param url
+   * @param options
+   * @returns get
+   */
+  delete<T>(
+    url: string,
+    options?: { params: Record<string, string> },
+  ): Observable<T> {
+    return this._http.delete<T>(
+      this.makeUrl(url),
+      this.getApiRequestOptions(options),
+    );
   }
 }
