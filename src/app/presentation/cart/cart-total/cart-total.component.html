@@ -1,5 +1,6 @@
-<div *ngIf="(totalSum$ | async) as sum">
-    <h2 class="total-sum">Всего: {{sum | rub}}</h2>
+<div *ngIf="(data$ | async) as data" class="container">
+    <div class="container__count">Количество товаров: {{data.countInCart}}</div>
+    <h3 class="total-sum">Итого: {{data.totalSum| rub}}</h3>
     <button mat-raised-button color="primary">Оформить</button>
 </div>
 
