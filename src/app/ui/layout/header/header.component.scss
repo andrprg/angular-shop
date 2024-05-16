@@ -1,7 +1,15 @@
+@import 'src/stylesheets/index';
+
 mat-toolbar {
     display: flex;
     justify-content: space-between;
     width: 100%;
     height: max-content;
     padding: 1rem 1.5rem;
+    cursor: pointer;
+
+    a {
+        color: var(--color-FFFFFF);
+        text-decoration: none;
+    }
 }

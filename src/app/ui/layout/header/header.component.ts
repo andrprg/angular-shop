@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { HeaderButtonsComponent } from '../header-buttons/header-buttons.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-header',
@@ -10,7 +11,8 @@ import { HeaderButtonsComponent } from '../header-buttons/header-buttons.compone
     standalone: true,
     imports: [
         MatToolbarModule,
-        HeaderButtonsComponent
+        HeaderButtonsComponent,
+        RouterLink
     ]
 })
 export class HeaderComponent {
