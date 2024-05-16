@@ -1,0 +1,18 @@
+@import "src/stylesheets/index";
+
+.container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &__img {
+        height: 10rem;
+    }
+
+    &__text {
+        @include font-Ubuntu-fz22(700);
+    }
+}
+

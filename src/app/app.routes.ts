@@ -24,4 +24,8 @@ export const routes: Routes = [
     path: "cart",
     loadComponent: () => import('./presentation/cart/cart.component').then(m => m.CartComponent)
   },  
+  {
+    path: "**",
+    loadComponent: () => import('./presentation/page-not-found/page-not-found.component').then(m => m.PageNotFoundComponent)
+  },  
 ];
