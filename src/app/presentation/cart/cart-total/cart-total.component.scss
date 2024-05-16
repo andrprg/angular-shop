@@ -1,4 +1,8 @@
 @import 'src/stylesheets/index';
 
-.container__count {
+.container {
+    @include font-Ubuntu-fz16(500);
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
 }

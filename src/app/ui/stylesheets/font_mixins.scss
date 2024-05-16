@@ -1,11 +1,36 @@
-@mixin font-Ubuntu-fz14-fw400 {
-    font-family: Ubuntu;
-    font-size: 14px;    
-    font-weight: 400;
+
+@mixin font-Ubuntu-fz14($wg: 400) {
+  font-family: Ubuntu;
+  font-size: 0.875rem;
+  font-weight: #{$wg};
 }
 
-@mixin font-Ubuntu-fz18-fw700 {
-    font-family: Ubuntu;
-    font-size: 18px;    
-    font-weight: 700;
+@mixin font-Ubuntu-fz16($wg: 400) {
+  font-family: Ubuntu;
+  font-size: 1rem;
+  font-weight: #{$wg};
+}
+
+@mixin font-Ubuntu-fz18($wg: 400) {
+  font-family: Ubuntu;
+  font-size: 1.125rem;
+  font-weight: #{$wg};
+}
+
+@mixin font-Ubuntu-fz20($wg: 400) {
+  font-family: Ubuntu;
+  font-size: 1.25rem;
+  font-weight: #{$wg};
+}
+
+@mixin font-Ubuntu-fz22($wg: 400) {
+  font-family: Ubuntu;
+  font-size: 1.375rem;
+  font-weight: #{$wg};
+}
+
+@mixin font-Ubuntu-fz24($wg: 400 ) {
+  font-family: Ubuntu;
+  font-size: 1.5rem;
+  font-weight: #{$wg};
 }
