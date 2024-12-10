@@ -15,34 +15,34 @@ export class AuthService implements OnDestroy {
   private subject = new BehaviorSubject<User | null>(null);
 
   /**
-   * Информация о пользователе
-   */
+  * Информация о пользователе
+  */
   user$: Observable<User | null> = this.subject.asObservable();
 
   /**
-   * access token
-   */
+  * access token
+  */
   access_token: string | undefined | null;
 
   /**
- * refresh token
- */
+  * refresh token
+  */
   private refresh_token: string | undefined | null;
 
 
   /**
-   * Пользователь авторизован
-   */
+  * Пользователь авторизован
+  */
   isLoggedIn$: Observable<boolean>;
 
   /**
-   * Пользователь не авторизован
-   */
+  * Пользователь не авторизован
+  */
   isLoggedOut$: Observable<boolean>;
 
   /**
-   * Subject для отписки
-   */
+  * Subject для отписки
+  */
   destroy$ = new Subject<boolean>();
 
   constructor(
@@ -51,20 +51,6 @@ export class AuthService implements OnDestroy {
   ) {
     this.isLoggedIn$ = this.user$.pipe(map(user => !!user));
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map(loggedIn => !loggedIn));
-
-    this.localStorageService.getItem<User>('user').pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(user => user && this.subject.next(user));
-
-    this.localStorageService.getItem<string>('token').pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(token => this.access_token = token);
-
-    this.localStorageService.getItem<string>('refresh_token').pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(token => this.refresh_token = token);
-
-
   }
 
   ngOnDestroy(): void {
@@ -73,15 +59,24 @@ export class AuthService implements OnDestroy {
   }
 
   /**
-   * Авторизация
-   * @param email 
-   * @param password 
-   */
+  * Пользователь
+  */
+  get user(): User | null {
+    return this.subject.getValue();
+  }
+
+  /**
+  * Авторизация
+  * @param email 
+  * @param password 
+  */
   login(email: string, password: string): Observable<User> {
     return this.apiCommonService.post<Token>('/login', { email, password }).pipe(
       tap((response: Token) => {
-        this.localStorageService.setItem('token', response.token);
+        this.localStorageService.setItem('access_token', response.token);
         this.localStorageService.setItem('refresh_token', response.refreshToken);
+        this.access_token = response.token;
+        this.refresh_token = response.refreshToken;
       }),
       map((response: Token) => {
         const { id, name, email } = JSON.parse(atob(response.token.split('.')[1]));
@@ -96,13 +91,13 @@ export class AuthService implements OnDestroy {
   logout() {
     this.apiCommonService.post<string>('/revoketoken');
     this.subject.next(null);
-    this.localStorageService.removeItem('token');
+    this.localStorageService.removeItem('access_token');
     this.localStorageService.removeItem('refresh_token');
   }
 
   /**   
-   * @description запускаем таймер за минуту до истечения срока действия токена
-   */
+  * @description запускаем таймер за минуту до истечения срока действия токена
+  */
   private startTokenTimer() {
     if (!this.access_token) return;
     const jwtToken = JSON.parse(atob(this.access_token.split('.')[1]));
@@ -114,7 +109,8 @@ export class AuthService implements OnDestroy {
   private refreshToken() {
     this.apiCommonService.post<Token>('/token', { refreshToken: this.refresh_token }).pipe(
       tap((response: Token) => {
-        this.localStorageService.setItem('token', response.token);
+        this.localStorageService.setItem('access_token', response.token);
+        this.access_token = response.token;
       }),
       map((response: Token) => {
         const { id, name, email } = JSON.parse(atob(response.token.split('.')[1]));
