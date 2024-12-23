@@ -4,4 +4,3 @@ export const environment: EnvironmentInterface = {
     production: false,
     hostUrl: 'http://localhost:9000'
 };
-

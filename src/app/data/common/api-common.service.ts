@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HOST_URL } from 'src/environments/environment';
+import { environment } from 'src/environments/environment';
 
 export interface ApiRequestOptions {
   params: HttpParams;
@@ -38,7 +38,7 @@ export class ApiCommonService {
    * @returns Полный путь
    */
   makeUrl(url: string): string {
-    return url.indexOf('http') === 0 ? url : `${HOST_URL}${url}`;
+    return url.indexOf('http') === 0 ? url : `${environment.hostUrl}${url}`;
   }
 
   /**
