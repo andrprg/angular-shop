@@ -1,12 +1,18 @@
-export type ProductID = string;
+import { z } from "zod";
 
-export interface Product {
-    id: ProductID;
-    imageUrl: string;
-    title: string;
-    description: string;
-    price: number;
-    availableQuantity: number;
-    avgRating: number;
-    numRatings: number;
-}
+export const productIDSchema = z.string();
+
+export const productSchema = z.object({
+    id: productIDSchema,
+    imageUrl: z.string().url(),
+    title: z.string(),
+    description: z.string(),
+    price: z.number().nonnegative(),
+    availableQuantity: z.number().nonnegative(),
+    avgRating: z.number().nonnegative(),
+    numRatings: z.number().nonnegative(),
+});
+
+export type ProductID = z.infer<typeof productIDSchema>;
+export type Product = z.infer<typeof productSchema>;
+

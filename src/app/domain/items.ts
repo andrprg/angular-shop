@@ -1,7 +1,11 @@
-import { ProductID } from "./product";
+import { z } from "zod";
+import { productIDSchema } from "./product";
 
-export interface Item {
-    productId: ProductID;
-    price: number;
-    quantity: number;
-}
+export const itemSchema = z.object({ 
+    productId: productIDSchema, 
+    price: z.number().nonnegative(), 
+    quantity: z.number().nonnegative(), 
+});
+
+export type Item = z.infer<typeof itemSchema>;
+
