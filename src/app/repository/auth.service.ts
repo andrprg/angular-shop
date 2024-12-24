@@ -1,11 +1,14 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, delay, map, shareReplay, take, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, delay, map, shareReplay, take, takeUntil, tap } from 'rxjs';
 import { User } from '../domain/user';
 import { LocalStorageService } from './local-storage.service';
 import { ApiCommonService } from '../data/common/api-common.service';
-import { Token } from '../domain/token';
+import { Token, tokenSchema } from '../domain/token';
 import { SpinnerService } from '../ui/spinner/spinner.service';
 import { timer } from 'rxjs';
+import { parseResponse } from '../core/helper';
+import { ZodError } from 'zod';
+import { MessagesService } from '../ui/messages/messages.service';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +51,7 @@ export class AuthService implements OnDestroy {
   constructor(
     private localStorageService: LocalStorageService,
     private apiCommonService: ApiCommonService,
+    private messageService:  MessagesService,
   ) {
     this.isLoggedIn$ = this.user$.pipe(map(user => !!user));
     this.isLoggedOut$ = this.isLoggedIn$.pipe(map(loggedIn => !loggedIn));
@@ -86,6 +90,7 @@ export class AuthService implements OnDestroy {
    */
   login(email: string, password: string): Observable<User> {
     return this.apiCommonService.post<Token>('/login', { email, password }).pipe(
+      parseResponse(tokenSchema),
       tap((response: Token) => {
         this.localStorageService.setItem('token', response.token);
         this.localStorageService.setItem('refresh_token', response.refreshToken);
@@ -95,6 +100,12 @@ export class AuthService implements OnDestroy {
         this.subject.next({ id, name, email });
         this.startTokenTimer();
         return { id, name, email };
+      }),
+      catchError((err) => {
+        if(err instanceof ZodError) {
+          this.messageService.showErrors('Неподдерживаемый формат ответа');
+        }
+        return EMPTY;
       }),
       shareReplay()
     )
